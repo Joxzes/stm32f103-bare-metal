@@ -7,6 +7,9 @@
 #define GPIOC_BSRR (*(volatile uint32_t *)0x40011010u)
 
 int main(void) {
+    uint32_t previous_state = 1u;
+    uint32_t current_state;
+
     RCC_APB2ENR |= (1u << 4);
 
     GPIOC_CRH &= ~(0xFu << 20);
@@ -18,10 +21,16 @@ int main(void) {
     GPIOC_BSRR = (1u << 31);
 
     for (;;) {
-        if ((GPIOC_IDR & (1u << 15)) == 0u) {
-            GPIOC_BSRR = (1u << 13);
-        } else {
-            GPIOC_BSRR = (1u << 29);
+        current_state = (GPIOC_IDR >> 15) & 1u;
+
+        if ((previous_state == 1) && (current_state == 0)) {
+            if ((GPIOC_ODR & (1u << 13)) != 0) {
+                GPIOC_BSRR = (1u << 29);
+            } else {
+                GPIOC_BSRR = (1u << 13);
+            }
         }
+
+        previous_state = current_state;
     }
 }

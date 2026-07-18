@@ -24,10 +24,17 @@ int main(void) {
         current_state = (GPIOC_IDR >> 15) & 1u;
 
         if ((previous_state == 1) && (current_state == 0)) {
-            if ((GPIOC_ODR & (1u << 13)) != 0) {
-                GPIOC_BSRR = (1u << 29);
-            } else {
-                GPIOC_BSRR = (1u << 13);
+            for (volatile uint32_t i = 0u; i < 50000; i++) {
+            }
+
+            current_state = (GPIOC_IDR >> 15) & 1u;
+            
+            if (current_state == 0) {
+                if ((GPIOC_ODR & (1u << 13)) != 0) {
+                    GPIOC_BSRR = (1u << 29);
+                } else {
+                    GPIOC_BSRR = (1u << 13);
+                }
             }
         }
 

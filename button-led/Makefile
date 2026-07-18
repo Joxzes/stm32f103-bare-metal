@@ -6,19 +6,21 @@ OPENOCD = openocd
 
 CPUFLAGS = -mcpu=cortex-m3 -mthumb
 
-CFLAGS = $(CPUFLAGS) \
-         -Wall -Wextra \
+CFLAGS = $(CPUFLAGS) -Wall -Wextra \
          -ffreestanding \
          -fno-common \
          -O0 -g3 \
          -ffunction-sections \
          -fdata-sections
 
-LDFLAGS = $(CPUFLAGS) -T linker.ld -nostdlib -Wl,--gc-sections -Wl,-Map=build/firmware.map
+LDFLAGS = $(CPUFLAGS) -T linker/stm32f103c8.ld \
+		 -nostdlib \
+		 -Wl,--gc-sections \
+		 -Wl,-Map=build/firmware.map
 
 OPENOCD_FLAGS = -f interface/stlink.cfg -f target/stm32f1x.cfg
 
-SOURCES = src/startup.c src/main.c
+SOURCES = startup/startup_stm32f103c8.c src/main.c
 OBJECTS = build/startup.o build/main.o
 
 TARGET = build/firmware
@@ -28,7 +30,7 @@ all: $(TARGET).elf $(TARGET).bin
 build:
 	mkdir -p build
 
-build/startup.o: src/startup.c | build
+build/startup.o: startup/startup_stm32f103c8.c | build
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/main.o: src/main.c | build

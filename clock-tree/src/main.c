@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "rcc.h"
 
 #define RCC_APB2ENR (*(volatile uint32_t *)0x40021018u)
 #define GPIOC_CRH (*(volatile uint32_t *)0x40011004u)
@@ -7,6 +8,8 @@
 #define GPIOC_BSRR (*(volatile uint32_t *)0x40011010u)
 
 int main(void) {
+    clock_tree_init();
+
     uint32_t previous_state = 1u;
     uint32_t current_state;
 

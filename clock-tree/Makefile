@@ -7,21 +7,28 @@ OPENOCD = openocd
 CPUFLAGS = -mcpu=cortex-m3 -mthumb
 
 CFLAGS = $(CPUFLAGS) -Wall -Wextra \
-         -ffreestanding \
-         -fno-common \
-         -O0 -g3 \
-         -ffunction-sections \
-         -fdata-sections
+         			 -ffreestanding \
+         			 -fno-common \
+         			 -O0 -g3 \
+         			 -ffunction-sections \
+         			 -fdata-sections \
+		 			 -Iinclude
 
 LDFLAGS = $(CPUFLAGS) -T linker/stm32f103c8.ld \
-		 -nostdlib \
-		 -Wl,--gc-sections \
-		 -Wl,-Map=build/firmware.map
+		 			  -nostdlib \
+		 			  -Wl,--gc-sections \
+		 			  -Wl,-Map=build/firmware.map
 
-OPENOCD_FLAGS = -f interface/stlink.cfg -f target/stm32f1x.cfg
+OPENOCD_FLAGS = -f interface/stlink.cfg \
+		 		-f target/stm32f1x.cfg
 
-SOURCES = startup/startup_stm32f103c8.c src/main.c
-OBJECTS = build/startup.o build/main.o
+SOURCES = startup/startup_stm32f103c8.c \
+ 		  src/main.c \
+		  src/rcc.c
+
+OBJECTS = build/startup.o \
+		  build/main.o \
+		  build/rcc.o
 
 TARGET = build/firmware
 
@@ -36,6 +43,9 @@ build/startup.o: startup/startup_stm32f103c8.c | build
 build/main.o: src/main.c | build
 	$(CC) $(CFLAGS) -c $< -o $@
 
+build/rcc.o: src/rcc.c | build
+	$(CC) $(CFLAGS) -c $< -o $@ 
+
 $(TARGET).elf: $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
 	$(SIZE) $@
@@ -47,7 +57,8 @@ inspect: $(TARGET).elf
 	$(OBJDUMP) -h -t $(TARGET).elf
 
 flash: $(TARGET).elf
-	$(OPENOCD) $(OPENOCD_FLAGS) -c "program $< verify reset exit"
+	$(OPENOCD) $(OPENOCD_FLAGS) \
+		-c "program $< verify reset exit"
 
 clean:
 	rm -rf build

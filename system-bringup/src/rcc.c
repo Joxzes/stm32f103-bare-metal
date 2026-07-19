@@ -1,16 +1,24 @@
-#include "rcc.h"
 #include <stdint.h>
+#include "rcc.h"
 
 typedef struct {
     volatile uint32_t CR;
     volatile uint32_t CFGR;
-} RCC_registers;
+    volatile uint32_t CIR;
+    volatile uint32_t APB2RSTR;
+    volatile uint32_t APB1RSTR;
+    volatile uint32_t AHBENR;
+    volatile uint32_t APB2ENR;
+    volatile uint32_t APB1ENR;
+    volatile uint32_t BDCR;
+    volatile uint32_t CSR;
+} RCC_TypeDef;
 
 typedef struct {
     volatile uint32_t ACR;
 } FLASH_registers;
 
-#define RCC ((RCC_registers *)0x40021000u)
+#define RCC ((RCC_TypeDef *)0x40021000u)
 #define FLASH ((FLASH_registers *)0X40022000u)
 
 void clock_tree_init(void) {
@@ -64,4 +72,22 @@ void clock_tree_init(void) {
 
     /* Optional - HSION/OFF */
     RCC->CR &= ~1u;
+}
+
+void gpio_clock_enable(GPIO_TypeDef *port) {
+    if (port == GPIOA) {
+        RCC->APB2ENR |= (1u << 2);
+    } else if (port == GPIOB) {
+        RCC->APB2ENR |= (1u << 3);
+    } else if (port == GPIOC) {
+        RCC->APB2ENR |= (1u << 4);
+    } else if (port == GPIOD) {
+        RCC->APB2ENR |= (1u << 5);
+    } else if (port == GPIOE) {
+        RCC->APB2ENR |= (1u << 6);
+    } else if (port == GPIOF) {
+        RCC->APB2ENR |= (1u << 7);
+    } else if (port == GPIOG) {
+        RCC->APB2ENR |= (1u << 8);
+    }
 }

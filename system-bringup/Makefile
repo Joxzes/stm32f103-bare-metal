@@ -24,11 +24,13 @@ OPENOCD_FLAGS = -f interface/stlink.cfg \
 
 SOURCES = startup/startup_stm32f103c8.c \
  		  src/main.c \
-		  src/rcc.c
+		  src/rcc.c \
+		  src/systick.c
 
 OBJECTS = build/startup.o \
 		  build/main.o \
-		  build/rcc.o
+		  build/rcc.o \
+		  build/systick.o
 
 TARGET = build/firmware
 
@@ -45,6 +47,9 @@ build/main.o: src/main.c | build
 
 build/rcc.o: src/rcc.c | build
 	$(CC) $(CFLAGS) -c $< -o $@ 
+
+build/systick.o: src/systick.c | build
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET).elf: $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $@

@@ -50,15 +50,10 @@ int main(void) {
     clock_tree_init();
     systick_init();
 
-    RCC_APB2ENR |= (1u << 4);
+    gpio_clock_enable(GPIOC);
 
-    GPIOC_CRH &= ~(0xFu << 20);
-    GPIOC_CRH |= (0x2u << 20);
-
-    GPIOC_CRH &= ~(0xFu << 28);
-    GPIOC_CRH |= (0x8u << 28);
-
-    GPIOC_BSRR = (1u << 31);
+    gpio_config(GPIOC, 13, GPIO_OUTPUT);
+    gpio_config(GPIOC, 15, GPIO_INPUT_PULLDOWN);
 
     for (;;) {
         blink();

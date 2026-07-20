@@ -3,7 +3,7 @@
 #include "systick.h"
 
 static void button_toggle_led(void) {
-    static uint8_t previous_state = 1u;
+    static uint8_t previous_state = 0u;
     uint8_t current_state = gpio_read(GPIOC, 15);
 
     if ((previous_state == 1) && (current_state == 0)) {

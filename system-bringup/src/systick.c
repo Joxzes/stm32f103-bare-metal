@@ -10,19 +10,28 @@ typedef struct {
 
 #define STK ((STK_registers *)0xE000E010u)
 
+static volatile uint32_t ticks = 0u;
+
 void systick_init(void) {
-    STK->CTRL &= ~1u;
+    STK->CTRL = 0u;
+
     STK->LOAD = 0x1193Fu;
-    STK->VAL = 1u;
+
+    STK->VAL = 0u;
+
     STK->CTRL |= (1u << 2);
-    STK->CTRL &= ~(1u << 1);
+    STK->CTRL |= (1u << 1);
     STK->CTRL |= 1u;
 }
 
+void SysTick_Handler(void)
+{
+    ticks++;
+}
+
 void delay(uint32_t ms) {
-    while (ms > 0u) {
-        if ((STK->CTRL & (1u << 16)) != 0u) {
-            ms--;
-        }
+    uint32_t start = ticks;
+
+    while ((ticks - start) < ms) {
     }
 }

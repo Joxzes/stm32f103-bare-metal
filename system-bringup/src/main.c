@@ -7,7 +7,7 @@ static void button_toggle_led(void) {
     uint8_t current_state = gpio_read(GPIOC, 15);
 
     if ((previous_state == 1) && (current_state == 0)) {
-        delay(10);
+        delay(10u);
 
         current_state = gpio_read(GPIOC, 15);
         
@@ -33,10 +33,10 @@ static void press_button_led(void) {
 
 static void blink(void) {
     gpio_write(GPIOC, 13, 1);
-    delay(500);
+    delay(500u);
 
     gpio_write(GPIOC, 13, 0);
-    delay(500);
+    delay(500u);
 }
 
 int main(void) {
@@ -49,8 +49,8 @@ int main(void) {
     gpio_config(GPIOC, 15, GPIO_INPUT_PULLDOWN);
 
     for (;;) {
-        button_toggle_led();
+        // button_toggle_led();
         // press_button_led();
-        // blink();
+        blink();
     }
 }

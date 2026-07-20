@@ -24,9 +24,12 @@ void systick_init(void) {
     STK->CTRL |= 1u;
 }
 
-void SysTick_Handler(void)
-{
+void SysTick_Handler(void) {
     ticks++;
+}
+
+uint32_t millis(void) {
+    return ticks;
 }
 
 void delay(uint32_t ms) {

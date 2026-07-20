@@ -111,7 +111,7 @@ void Reset_Handler(void) {
         source++;
     }
 
-    destination = &_ebss;
+    destination = &_sbss;
 
     while (destination < &_ebss) {
         *destination = 0;

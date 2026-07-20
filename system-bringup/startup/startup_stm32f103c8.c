@@ -10,15 +10,15 @@ extern uint32_t _ebss;
 int main(void);
 
 void Reset_Handler(void);
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void MemManage_Handler(void);
-void BusFault_Handler(void);
-void UsageFault_Handler(void);
-void SVCall_Handler(void);
-void DebugMon_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
+void NMI_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void HardFault_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void MemManage_Handler(void) __attribute__((weak, alias("Default_Handler"))); 
+void BusFault_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void UsageFault_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SVCall_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void DebugMon_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void PendSV_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void SysTick_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void Default_Handler(void);
 
 __attribute__((section(".isr_vector"), used))
@@ -120,42 +120,6 @@ void Reset_Handler(void) {
 
     main();
     
-    for (;;) {}
-}
-
-void NMI_Handler(void) {
-    for (;;) {}
-}
-
-void HardFault_Handler(void) {
-    for (;;) {}
-}
-
-void MemManage_Handler(void) {
-    for (;;) {}
-}
-
-void BusFault_Handler(void) {
-    for (;;) {}
-}
-
-void UsageFault_Handler(void) {
-    for (;;) {}
-}
-
-void SVCall_Handler(void) {
-    for (;;) {}
-}
-
-void DebugMon_Handler(void) {
-    for (;;) {}
-}
-
-void PendSV_Handler(void) {
-    for (;;) {}
-}
-
-void SysTick_Handler(void) {
     for (;;) {}
 }
 

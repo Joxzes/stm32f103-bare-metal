@@ -29,8 +29,8 @@ typedef enum{
 #define GPIOG ((GPIO_TypeDef *)0X40012000u)
 
 void gpio_clock_enable(GPIO_TypeDef *port);
-void gpio_config(GPIO_TypeDef *port, uint32_t pin, gpio_mode_t mode);
-void gpio_write(GPIO_TypeDef *port, uint32_t pin, uint32_t state);
-uint32_t gpio_read(GPIO_TypeDef *port, uint32_t pin);
+void gpio_config(GPIO_TypeDef *port, uint8_t pin, gpio_mode_t mode);
+void gpio_write(GPIO_TypeDef *port, uint8_t pin, uint8_t state);
+uint8_t gpio_read(GPIO_TypeDef *port, uint8_t pin);
 
 #endif

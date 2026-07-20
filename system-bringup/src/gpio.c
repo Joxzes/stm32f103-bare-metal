@@ -1,9 +1,9 @@
 #include <stdint.h>
 #include "gpio.h"
 
-void gpio_config(GPIO_TypeDef *port, uint32_t pin, gpio_mode_t mode) {
+void gpio_config(GPIO_TypeDef *port, uint8_t pin, gpio_mode_t mode) {
     volatile uint32_t *config_register;
-    uint32_t position;
+    uint8_t position;
     uint32_t configuration;
 
     if ((port == 0) || (pin > 15u)) {
@@ -43,4 +43,24 @@ void gpio_config(GPIO_TypeDef *port, uint32_t pin, gpio_mode_t mode) {
 
     *config_register &= ~(0xFu << position);
     *config_register |=  (configuration << position);
+}
+
+void gpio_write(GPIO_TypeDef *port, uint8_t pin, uint8_t state) {
+    if ((port == 0) || (pin > 15u)) {
+        return;
+    }
+
+    if (state) {
+        port->BSRR = (1u << pin);
+    } else {
+        port->BRR = (1u << pin);
+    }
+}
+
+uint8_t gpio_read(GPIO_TypeDef *port, uint8_t pin) {
+    if ((port == 0) || (pin > 15u)) {
+        return 0;
+    }
+
+    return (uint8_t)((port->IDR >> pin) & 1u);
 }

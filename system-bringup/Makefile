@@ -26,13 +26,21 @@ SOURCES = startup/startup_stm32f103c8.c \
  		  src/main.c \
 		  src/rcc.c \
 		  src/systick.c \
-		  src/gpio.c
+		  src/gpio.c \
+		  src/afio.c \
+		  src/exti.c \
+		  src/nvic.c \
+		  src/button.c
 
 OBJECTS = build/startup.o \
 		  build/main.o \
 		  build/rcc.o \
 		  build/systick.o \
-		  build/gpio.o
+		  build/gpio.o \
+		  build/afio.o \
+		  build/exti.o \
+		  build/nvic.o \
+		  build/button.o
 
 TARGET = build/firmware
 
@@ -54,6 +62,18 @@ build/systick.o: src/systick.c | build
 	$(CC) $(CFLAGS) -c $< -o $@
 
 build/gpio.o: src/gpio.c | build
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/afio.o: src/afio.c | build
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/exti.o: src/exti.c | build
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/nvic.o: src/nvic.c | build
+	$(CC) $(CFLAGS) -c $< -o $@
+
+build/button.o: src/button.c | build
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET).elf: $(OBJECTS)

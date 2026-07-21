@@ -1,42 +1,64 @@
 #include <stdint.h>
 #include "rcc.h"
 #include "systick.h"
+#include "gpio.h"
+#include "afio.h"
+#include "exti.h"
+#include "nvic.h"
+#include "button.h"
 
-static void button_toggle_led(void) {
-    static uint8_t previous_state = 0u;
-    uint8_t current_state = gpio_read(GPIOC, 15);
+static void blink(void) {
+    static uint32_t previous = 0u;
+    uint32_t now = millis();
 
-    if ((previous_state == 1) && (current_state == 0)) {
-        delay(10u);
+    if ((now - previous) >= 250u) {
+        previous = now;
 
-        current_state = gpio_read(GPIOC, 15);
-        
-        if (current_state == 0) {
-            if (gpio_read(GPIOC, 13) != 0) {
-                gpio_write(GPIOC, 13, 0);
-            } else {
-                gpio_write(GPIOC, 13, 1);
+        if (gpio_read(GPIOC, 13u)) {
+            gpio_write(GPIOC, 13u, 0);
+        } else {
+            gpio_write(GPIOC, 13u, 1);
+        }
+    }
+}
+
+static void button_blink(void)
+{
+    static uint8_t blink_en = 0u;
+    static uint8_t locked = 0u;
+
+    uint8_t event = button_pressed();
+
+    if (event && !locked)
+    {
+        delay(20u);
+
+        if (!gpio_read(GPIOC, 15u))
+        {
+            blink_en = !blink_en;
+            locked = 1u;
+
+            if (!blink_en)
+            {
+                gpio_write(GPIOC, 13u, 1u);
             }
         }
     }
 
-    previous_state = current_state;
-}
+    if (locked && gpio_read(GPIOC, 15u))
+    {
+        delay(20u);
 
-static void press_button_led(void) {
-    if (gpio_read(GPIOC, 15) != 0) {
-        gpio_write(GPIOC, 13, 0);
-    } else {
-        gpio_write(GPIOC, 13, 1);
+        if (gpio_read(GPIOC, 15u))
+        {
+            locked = 0u;
+        }
     }
-}
 
-static void blink(void) {
-    gpio_write(GPIOC, 13, 1);
-    delay(500u);
-
-    gpio_write(GPIOC, 13, 0);
-    delay(500u);
+    if (blink_en)
+    {
+        blink();
+    }
 }
 
 int main(void) {
@@ -44,13 +66,14 @@ int main(void) {
     systick_init();
 
     gpio_clock_enable(GPIOC);
+    afio_clock_enable();
 
     gpio_config(GPIOC, 13, GPIO_OUTPUT);
-    gpio_config(GPIOC, 15, GPIO_INPUT_PULLDOWN);
+    gpio_write(GPIOC, 13, 1);
+
+    button_config(GPIOC, 15);
 
     for (;;) {
-        // button_toggle_led();
-        // press_button_led();
-        blink();
+        button_blink();
     }
 }

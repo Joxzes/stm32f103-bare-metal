@@ -19,6 +19,7 @@ void SVCall_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void DebugMon_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void PendSV_Handler(void) __attribute__((weak, alias("Default_Handler")));
 void SysTick_Handler(void) __attribute__((weak, alias("Default_Handler")));
+void EXTI15_10_IRQHandler(void) __attribute__((weak, alias("Default_Handler")));
 void Default_Handler(void);
 
 __attribute__((section(".isr_vector"), used))
@@ -96,7 +97,7 @@ const uintptr_t vector_table[] = {
     (uintptr_t)Default_Handler, // IRQ38: USART2
     (uintptr_t)Default_Handler, // IRQ39: USART3
 
-    (uintptr_t)Default_Handler, // IRQ40: EXTI15_10
+    (uintptr_t)EXTI15_10_IRQHandler, // IRQ40: EXTI15_10
     (uintptr_t)Default_Handler, // IRQ41: RTCAlarm
     (uintptr_t)Default_Handler, // IRQ42: USBWakeup
 };

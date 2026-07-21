@@ -91,3 +91,7 @@ void gpio_clock_enable(GPIO_TypeDef *port) {
         RCC->APB2ENR |= (1u << 8);
     }
 }
+
+void afio_clock_enable(void) {
+    RCC->APB2ENR |= 1u;
+}

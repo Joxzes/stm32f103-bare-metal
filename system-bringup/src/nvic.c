@@ -11,3 +11,11 @@ void nvic_enable_irq(uint8_t irq) {
 
     NVIC->ISER[index] = (1u << position);
 }
+
+void nvic_set_priority(uint8_t irq, uint8_t priority) {
+    if ((irq > 42u) || (priority > 15u)) {
+        return;
+    }
+
+    NVIC->IPR[irq] = (uint8_t)(priority << 4);
+}

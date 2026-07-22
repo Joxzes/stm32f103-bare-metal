@@ -14,7 +14,7 @@ typedef struct {
     uint32_t RESERVED3[29];
     volatile uint32_t IABR[3];
     uint32_t RESERVED4[61];
-    volatile uint32_t IPR[21];
+    volatile uint8_t IPR[84];
     uint32_t RESERVED5[683];
     volatile uint32_t STIR;
 } NVIC_TypeDef;

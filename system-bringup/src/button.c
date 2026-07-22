@@ -52,6 +52,7 @@ void button_config(GPIO_TypeDef *port, uint8_t line) {
     } 
 
     exti_configure_line(line, FALLING);
+    nvic_set_priority(irq, 2u);
     nvic_enable_irq(irq);
 }
 

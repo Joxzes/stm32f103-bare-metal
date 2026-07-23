@@ -72,6 +72,14 @@ void gpio_clock_enable(GPIO_TypeDef *port) {
     }
 }
 
+void tim_clock_en(uint8_t tim) {
+    if ((tim > 4u) || (tim < 2)) {
+        return;
+    }
+
+    RCC->APB1ENR |= (1u << (tim - 2u));
+}
+
 void afio_clock_enable(void) {
     RCC->APB2ENR |= 1u;
 }

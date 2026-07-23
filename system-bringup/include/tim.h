@@ -5,5 +5,6 @@
 #include "stm32f103.h"
 
 void tim_init(uint8_t tim);
+uint32_t tim2_millis(void);
 
 #endif

@@ -70,6 +70,29 @@ typedef struct {
     volatile uint32_t PR;
 } EXTI_TypeDef;
 
+typedef struct {
+    volatile uint32_t CR1;
+    volatile uint32_t CR2;
+    volatile uint32_t SMCR;
+    volatile uint32_t DIER;
+    volatile uint32_t SR;
+    volatile uint32_t EGR;
+    volatile uint32_t CCMR1;
+    volatile uint32_t CCMR2;
+    volatile uint32_t CCER;
+    volatile uint32_t CNT;
+    volatile uint32_t PSC;
+    volatile uint32_t ARR;
+    uint32_t RESERVED0;
+    volatile uint32_t CCR1;
+    volatile uint32_t CCR2;
+    volatile uint32_t CCR3;
+    volatile uint32_t CCR4;
+    uint32_t RESERVED1;
+    volatile uint32_t DCR;
+    volatile uint32_t DMAR;
+} TIM_TypeDef;
+
 typedef enum {
     GPIO_INPUT_ADC,
     GPIO_INPUT_PULLUP,
@@ -111,5 +134,9 @@ typedef enum {
 #define GPIOG ((GPIO_TypeDef *)0X40012000u)
 
 #define EXTI ((EXTI_TypeDef *)0x40010400u)
+
+#define TIM2 ((TIM_TypeDef *)0x40000000u)
+#define TIM3 ((TIM_TypeDef *)0x40000400u)
+#define TIM4 ((TIM_TypeDef *)0x40000800u)
 
 #endif
